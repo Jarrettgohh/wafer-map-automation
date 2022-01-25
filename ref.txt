@@ -1,0 +1,7 @@
+1. https://www.py4u.net/discuss/187601
+2. https://pythonexamples.org/python-pillow-adjust-image-sharpness/
+3. https://stackoverflow.com/questions/9480013/image-processing-to-improve-tesseract-ocr-accuracy
+
+4. https://stackoverflow.com/questions/40693439/python-tesseract-increase-accuracy-for-ocr
+5. https://stackoverflow.com/questions/67360958/how-to-improve-the-ocr-accuracy-in-this-image
+6. https://tesseract-ocr.github.io/tessdoc/ImproveQuality.html
