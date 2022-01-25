@@ -21,8 +21,6 @@ area_fraction = wafer_mapping_configurations['area_fraction']
 area_fraction_column = area_fraction['column']
 color_indicators = wafer_mapping_configurations['color_indicators']
 
-area_fraction
-
 to_plot_rows = to_plot['rows']
 to_plot_columns = to_plot['columns']
 
