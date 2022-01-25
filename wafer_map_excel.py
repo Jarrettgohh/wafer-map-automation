@@ -31,28 +31,28 @@ file_dir = f'C:/Users/gohja/Desktop/wafer-map-automation/{filename}'
 #
 
 wb = load_workbook(filename=filename)
-ws = wb.active
+ws = wb['1st Wafer (ML 1)']
 
-# # Create a scatter chart
-# chart = ScatterChart()
-# chart.title = "Scatter Chart Automation Test"
-# chart.legend = None
+# Create a scatter chart
+chart = ScatterChart()
+chart.title = "Scatter Chart Automation Test"
+chart.legend = None
 
-# x_col = column_index_from_string(to_plot_columns[0])
-# y_col = column_index_from_string(to_plot_columns[1])
-# min_row = to_plot_rows[0]
-# max_row = to_plot_rows[1]
+x_col = column_index_from_string(to_plot_columns[0])
+y_col = column_index_from_string(to_plot_columns[1])
+min_row = to_plot_rows[0]
+max_row = to_plot_rows[1]
 
-# xvalues = Reference(ws, min_col=x_col, min_row=min_row, max_row=max_row)
-# yvalues = Reference(ws, min_col=y_col, min_row=min_row, max_row=max_row)
+xvalues = Reference(ws, min_col=x_col, min_row=min_row, max_row=max_row)
+yvalues = Reference(ws, min_col=y_col, min_row=min_row, max_row=max_row)
 
-# # Plot the points on the scatter chart
-# series = Series(xvalues, yvalues)
-# series.marker = Marker('circle', size=15)
-# series.graphicalProperties.line.noFill = True
+# Plot the points on the scatter chart
+series = Series(xvalues, yvalues)
+series.marker = Marker('circle', size=15)
+series.graphicalProperties.line.noFill = True
 
-# chart.series.append(series)
-# ws.add_chart(chart, "G14")
+chart.series.append(series)
+ws.add_chart(chart, "G14")
 
 #
 # Calculation of the area fraction, and coloring the markers on the chart
@@ -61,25 +61,25 @@ ws = wb.active
 area_fraction_rows = area_fraction['rows']
 area_fraction_col = area_fraction['column']
 
-for cell_row_index in range(area_fraction_rows[0], area_fraction_rows[1] + 1):
-    area_fraction = ws[area_fraction_col + str(cell_row_index)].value
-    area_fraction_percentage = area_fraction * 100
+# for cell_row_index in range(area_fraction_rows[0], area_fraction_rows[1] + 1):
+#     area_fraction = ws[area_fraction_col + str(cell_row_index)].value
+#     area_fraction_percentage = area_fraction * 100
 
-    color = 'blue'
+#     color = 'blue'
 
-    for color_indicator in color_indicators:
-        color_indicator_range = color_indicators[color_indicator]
-        color_indicator_lower_range = color_indicator_range[0]
-        color_indicator_upper_range = color_indicator_range[1]
+#     for color_indicator in color_indicators:
+#         color_indicator_range = color_indicators[color_indicator]
+#         color_indicator_lower_range = color_indicator_range[0]
+#         color_indicator_upper_range = color_indicator_range[1]
 
-        is_area_fraction_percentage_in_range = area_fraction_percentage >= color_indicator_lower_range and area_fraction_percentage <= color_indicator_upper_range
+#         is_area_fraction_percentage_in_range = area_fraction_percentage >= color_indicator_lower_range and area_fraction_percentage <= color_indicator_upper_range
 
-        if is_area_fraction_percentage_in_range:
-            color = color_indicator
-            break
+#         if is_area_fraction_percentage_in_range:
+#             color = color_indicator
+#             break
 
-    print(cell_row_index)
-    print(color)
+#     print(cell_row_index)
+#     print(color)
 
-# wb.save(filename)
-# os.startfile(file_dir)
+wb.save(filename)
+os.startfile(file_dir)

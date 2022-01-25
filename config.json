@@ -8,15 +8,14 @@
       "columns": ["B", "C"]
     },
     "area_fraction": {
-      "rows": [2, 50],
       "column": "D"
     },
     "color_indicators": {
-      "blue": [0, 5],
-      "light_blue": [5, 15],
-      "white": [15, 25],
-      "light_red": [25, 35],
-      "red": [35, 40]
+      "0000FF": [0, 5],
+      "ADD8E6": [5, 15],
+      "FFFFFF": [15, 25],
+      "FF7F7F ": [25, 35],
+      "FF0000": [35, 40]
     }
   }
 }
