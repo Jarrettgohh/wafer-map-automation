@@ -1,4 +1,7 @@
 import json
+import os
+
+from openpyxl.utils.cell import column_index_from_string
 from openpyxl.chart.marker import Marker
 from openpyxl import load_workbook
 from openpyxl.chart import (
@@ -10,25 +13,55 @@ from openpyxl.chart import (
 f = open('config.json')
 config_json = json.load(f)
 
-color_indicators = config_json['color_indicators']
+wafer_mapping_configurations = config_json['wafer_mapping_configurations']
+to_plot = wafer_mapping_configurations['to_plot']
+area_fraction = wafer_mapping_configurations['area_fraction']
+color_indicators = wafer_mapping_configurations['color_indicators']
+
+to_plot_rows = to_plot['rows']
+to_plot_columns = to_plot['columns']
 
 filename = 'wafer-mapping-automation-test.xlsx'
 file_dir = f'C:/Users/gohja/Desktop/wafer-map-automation/{filename}'
 
+#
+# Open the excel workbook
+#
+
 wb = load_workbook(filename=filename)
 ws = wb.active
 
-chart = ScatterChart()
-chart.title = "Scatter Chart Automation Test"
-chart.legend = None
+# # Create a scatter chart
+# chart = ScatterChart()
+# chart.title = "Scatter Chart Automation Test"
+# chart.legend = None
 
-xvalues = Reference(ws, min_col=2, min_row=2, max_row=50)
-yvalues = Reference(ws, min_col=3, min_row=2, max_row=50)
+# x_col = column_index_from_string(to_plot_columns[0])
+# y_col = column_index_from_string(to_plot_columns[1])
+# min_row = to_plot_rows[0]
+# max_row = to_plot_rows[1]
 
-series = Series(xvalues, yvalues)
-series.marker = Marker('circle', size=15)
-series.graphicalProperties.line.noFill = True
-chart.series.append(series)
+# xvalues = Reference(ws, min_col=x_col, min_row=min_row, max_row=max_row)
+# yvalues = Reference(ws, min_col=y_col, min_row=min_row, max_row=max_row)
 
-ws.add_chart(chart, "G14")
+# # Plot the points on the scatter chart
+# series = Series(xvalues, yvalues)
+# series.marker = Marker('circle', size=15)
+# series.graphicalProperties.line.noFill = True
+# chart.series.append(series)
+
+# ws.add_chart(chart, "G14")
+
+#
+# Calculation of the area fraction, and coloring the markers on the chart
+#
+
+area_fraction_rows = area_fraction['rows']
+area_fraction_col = area_fraction['column']
+
+for cell_row_index in range(area_fraction_rows[0], area_fraction_rows[1] + 1):
+    area_fraction = ws[area_fraction_col + str(cell_row_index)].value
+    area_fraction_percentage = area_fraction * 100
+
 wb.save(filename)
+os.startfile(file_dir)

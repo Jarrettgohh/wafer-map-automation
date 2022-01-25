@@ -1,11 +1,22 @@
 {
   "html_file_directory": "C:\\Users\\JONATHAN TAN\\Desktop\\NYP\\Reports\\Wafer Mapping\\20210917b SEM analysis.html",
   "images_directory": "./images",
-  "color_indicators": {
-    "blue": [0, 5],
-    "light_blue": [5, 15],
-    "white": [15, 25],
-    "light_red": [25, 35],
-    "red": [35, 40]
+
+  "wafer_mapping_configurations": {
+    "to_plot": {
+      "rows": [2, 50],
+      "columns": ["B", "C"]
+    },
+    "area_fraction": {
+      "rows": [2, 50],
+      "column": "D"
+    },
+    "color_indicators": {
+      "blue": [0, 5],
+      "light_blue": [5, 15],
+      "white": [15, 25],
+      "light_red": [25, 35],
+      "red": [35, 40]
+    }
   }
 }
