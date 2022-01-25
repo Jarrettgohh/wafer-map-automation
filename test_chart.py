@@ -4,6 +4,7 @@ from openpyxl.chart import (
     Reference,
     Series,
 )
+from openpyxl.chart.shapes import GraphicalProperties
 from openpyxl.chart.marker import Marker, DataPoint
 
 wb = Workbook()
@@ -21,30 +22,34 @@ rows = [
     (7, 17),
 ]
 
+marker_colors = [
+    "800000",
+    "0000FF",
+    "800000",
+    "0000FF",
+    "FF7F7F",
+    "800000",
+    "800000",
+    "FF7F7F",
+]
+
 for r in rows:
     ws.append(r)
 
 c = ScatterChart()
-xvalues = Reference(ws, min_col=1, min_row=2, max_row=9)
-yvalues = Reference(ws, min_col=2, min_row=2, max_row=9)
 
-series = Series(xvalues, yvalues)
-c.series.append(series)
+for i in range(1, 9):
+    xvalues = Reference(ws, min_col=1, min_row=i)
+    yvalues = Reference(ws, min_col=2, min_row=i)
 
-# c.add_data(xvalues, yvalues, titles_from_data=True)
-# c.title = "Chart with patterns"
+    series = Series(xvalues, yvalues)
+    series.marker = Marker(
+        'circle',
+        size=15,
+        spPr=GraphicalProperties(solidFill=marker_colors[i - 1]))
+    series.graphicalProperties.line.noFill = True
 
-# # set a pattern for the whole series
-# series = c.series[0]
-
-s = c.series[0]
-s.marker = Marker('circle', size=10)
-s.graphicalProperties.line.noFill = True
-
-# set a pattern for a 6th data point (0-indexed)
-pt = DataPoint(idx=5)
-pt.graphicalProperties.solidFill = "800000"
-s.dPt.append(pt)
+    c.series.append(series)
 
 ws.add_chart(c, "C1")
-wb.save("pattern.xlsx")
+wb.save("scatter.xlsx")

@@ -4,8 +4,7 @@ import sys
 
 from openpyxl.utils.cell import column_index_from_string
 from openpyxl.chart.shapes import GraphicalProperties
-from openpyxl.chart.marker import Marker, DataPoint
-from openpyxl.drawing.fill import PatternFillProperties, ColorChoice
+from openpyxl.chart.marker import Marker
 from openpyxl import load_workbook
 from openpyxl.chart import (
     ScatterChart,
