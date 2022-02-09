@@ -43,10 +43,8 @@ file_path = f'{file_directory}/{file_name}'
 wb = load_workbook(filename=file_path)
 ws = wb[sheet_name]
 
-area_fraction_df = pd.DataFrame([1, 2, 3, 4])
 
-
-def write_area_fraction_to_excel():
+def write_area_fraction_to_excel(area_fraction_df: pd.DataFrame):
     try:
         to_write_col = column_index_from_string(area_fraction_columns[0]) - 1
 
@@ -54,10 +52,8 @@ def write_area_fraction_to_excel():
             filename=file_path,
             df=area_fraction_df,
             sheet_name=sheet_name,
-            startrow=area_fraction_rows[0],
+            startrow=area_fraction_rows[0] - 1,
             startcol=to_write_col,
-            index=None,
-            header=None,
         )
 
     except PermissionError:
@@ -66,10 +62,12 @@ def write_area_fraction_to_excel():
         )
         sys.exit()
 
-    except:
+    except Exception as e:
         print(
             f'Something went wrong with writing to the excel file at path: {file_path}'
         )
+        print(e)
+
         sys.exit()
 
 
@@ -127,11 +125,8 @@ def plot_scatter_graph():
         sys.exit()
 
 
-def main():
-    write_area_fraction_to_excel()
+def wafer_map_excel(area_fraction_df: pd.DataFrame):
+    write_area_fraction_to_excel(area_fraction_df)
     # plot_scatter_graph()
 
     os.startfile(file_path)
-
-
-main()

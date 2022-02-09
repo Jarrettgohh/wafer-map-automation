@@ -1,13 +1,11 @@
 from pathlib import Path
 from copy import copy
 from typing import Union, Optional
-import numpy as np
 import pandas as pd
 import openpyxl
 
 from openpyxl.styles import Alignment
 from openpyxl import load_workbook
-from openpyxl.utils import get_column_letter
 
 
 def copy_excel_cell_range(
@@ -50,27 +48,14 @@ def append_df_to_excel(filename: Union[str, Path],
                        sheet_name: str = 'Sheet1',
                        startrow: Optional[int] = None,
                        startcol: Optional[int] = None,
-                       max_col_width: int = 30,
-                       autofilter: bool = False,
-                       fmt_int: str = "#,##0",
-                       fmt_float: str = "#,##0.00",
-                       fmt_date: str = "yyyy-mm-dd",
-                       fmt_datetime: str = "yyyy-mm-dd hh:mm",
                        truncate_sheet: bool = False,
                        storage_options: Optional[dict] = None,
+                       header=None,
+                       index=None,
                        **to_excel_kwargs) -> None:
-
-    def set_column_format(ws, column_letter, fmt):
-        for cell in ws[column_letter]:
-            cell.number_format = fmt
 
     filename = Path(filename)
     file_exists = filename.is_file()
-
-    # process parameters
-    # calculate first column number
-    # if the DF will be written using `index=True`, then `first_col = 2`, else `first_col = 1`
-    # first_col = int(to_excel_kwargs.get("index", True)) + 1
 
     # ignore [engine] parameter if it was passed
     if 'engine' in to_excel_kwargs:
@@ -86,8 +71,6 @@ def append_df_to_excel(filename: Union[str, Path],
                         engine="openpyxl",
                         mode="a" if file_exists else "w",
                         if_sheet_exists="new" if file_exists else None,
-                        date_format=fmt_date,
-                        datetime_format=fmt_datetime,
                         storage_options=storage_options) as writer:
         if file_exists:
             # try to open an existing workbook
@@ -114,20 +97,10 @@ def append_df_to_excel(filename: Union[str, Path],
         df.to_excel(writer,
                     sheet_name=sheet_name,
                     startcol=startcol,
+                    header=header,
+                    index=index,
                     **to_excel_kwargs)
         worksheet = writer.sheets[sheet_name]
-
-        if autofilter:
-            worksheet.auto_filter.ref = worksheet.dimensions
-
-        for x_col_no, dtyp in enumerate(df.dtypes, startcol + 1):
-
-            column_letter = get_column_letter(x_col_no)
-
-            if np.issubdtype(dtyp, np.integer):
-                set_column_format(worksheet, column_letter, fmt_int)
-            if np.issubdtype(dtyp, np.floating):
-                set_column_format(worksheet, column_letter, fmt_float)
 
         # Wrap the text
         for row in worksheet.rows:
