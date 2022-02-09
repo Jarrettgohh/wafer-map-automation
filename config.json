@@ -3,15 +3,16 @@
   "images_directory": "./images",
 
   "wafer_mapping_configurations": {
-    "main_directory": "C:/Users/gohja/Desktop/wafer-map-automation",
-    "template_file_directory": "/template.xlsx",
-    "to_write_file_directory": "/wafer-mapping-automation-test.xlsx",
+    "file_directory": "C:/Users/gohja/Desktop/wafer-map-automation",
+    "file_name": "wafer-mapping-automation-test.xlsx",
+    "sheet_name": "Coding Testing on ML 10",
     "to_plot": {
       "rows": [2, 50],
       "columns": ["B", "C"]
     },
     "area_fraction": {
-      "column": "D"
+      "rows": [2, 50],
+      "columns": ["D", "E"]
     },
     "color_indicators": {
       "0000FF": [0, 5],
