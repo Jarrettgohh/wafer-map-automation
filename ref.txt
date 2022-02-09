@@ -5,3 +5,35 @@
 4. https://stackoverflow.com/questions/40693439/python-tesseract-increase-accuracy-for-ocr
 5. https://stackoverflow.com/questions/67360958/how-to-improve-the-ocr-accuracy-in-this-image
 6. https://tesseract-ocr.github.io/tessdoc/ImproveQuality.html
+
+
+NOTES:
+
+--> Values listed below indicates the site number; and will be jumbled up when reading from HTML
+-> Each wafer would always have 49 points
+-> To find row to write in excel from the site number: (49 - site_number) + start_row
+
+--> The wafer would be in order, as in each image for a particular batch of wafers would always be side by side
+
+--> Fill up all data that the site number and defect fraction can be read, and leave cells that can't be read, as blank, with red highlight
+
+
+--> To chain the image preprocessing
+
+wafer 1
+
+10
+11
+12
+1
+2
+
+--
+
+wafer 2
+
+15
+16
+17
+18
+19

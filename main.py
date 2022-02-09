@@ -39,7 +39,7 @@ def image_smoothening(img):
     return th3
 
 
-def remove_noise_and_smooth(file_name):
+def remove_noise_and_smooth(file_name: str):
     img = cv2.imread(file_name, 0)
     filtered = cv2.adaptiveThreshold(img.astype(np.uint8), 255,
                                      cv2.ADAPTIVE_THRESH_MEAN_C,
@@ -52,15 +52,15 @@ def remove_noise_and_smooth(file_name):
     return or_image
 
 
-def set_image_dpi(file_path):
+def set_image_dpi(img: Image):
     IMAGE_SIZE = 1800
 
-    im = Image.open(file_path)
-    length_x, width_y = im.size
+    # img = Image.open(file_path)
+    length_x, width_y = img.size
     factor = max(1, int(IMAGE_SIZE / length_x))
     size = factor * length_x, factor * width_y
     # size = (1800, 1800)
-    im_resized = im.resize(size, Image.ANTIALIAS)
+    im_resized = img.resize(size, Image.ANTIALIAS)
     temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.jpg')
     temp_filename = temp_file.name
     im_resized.save(temp_filename, dpi=(300, 300))
@@ -99,8 +99,8 @@ def image_preprocessing_method_1(img_path: str):
 
 
 # Similar to method 1, but just lesser processing steps
-def image_preprocessing_method_2(img_path: str):
-    img = cv2.imread(img_path)
+def image_preprocessing_method_2(img: Image):
+    # img = cv2.imread(img_path)
     img = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     kernel = np.ones((1, 1), np.uint8)
@@ -110,9 +110,9 @@ def image_preprocessing_method_2(img_path: str):
     return img
 
 
-def image_preprocessing_method_3(img_path: str):
+def image_preprocessing_method_3(img: Image):
 
-    img = cv2.imread(img_path)
+    # img = cv2.imread(img_path)
     gry = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     blr = cv2.GaussianBlur(gry, (3, 3), 0)
     thr = cv2.threshold(blr, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
@@ -131,8 +131,8 @@ def image_preprocessing_method_3(img_path: str):
     return crp
 
 
-def image_preprocessing_method_4(img_path: str):
-    img = cv2.imread(img_path)
+def image_preprocessing_method_4(img: Image):
+    # img = cv2.imread(img_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     thresh = cv2.threshold(gray, 0, 255,
                            cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
@@ -157,8 +157,8 @@ def image_preprocessing_method_4(img_path: str):
     return result
 
 
-def image_preprocessing_method_5(img_path: str):
-    img = cv2.imread(img_path)
+def image_preprocessing_method_5(img: Image):
+    # img = cv2.imread(img_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     # Remove shadows, cf. https://stackoverflow.com/a/44752405/11089932
@@ -178,9 +178,9 @@ def image_preprocessing_method_5(img_path: str):
     return work_img
 
 
-def image_preprocessing_method_6(img_path: str):
+def image_preprocessing_method_6(img: Image):
 
-    temp_filename = set_image_dpi(img_path)
+    temp_filename = set_image_dpi(img)
     im_new = remove_noise_and_smooth(temp_filename)
 
     return im_new
@@ -202,16 +202,16 @@ def extract_point_and_defect_fraction_from_img(img: Image):
         txt = re.sub('¢', 'e', txt)
         txt = ''.join(txt.split())
 
-        point_match = re.search('(ML|MLRT)\d+..\d+r2', txt)
-        point_text = txt[point_match.start():point_match.end()]
-        point = re.sub('(ML|MLRT)\d+..', '', point_text).replace('r2', '')
+        site_match = re.search('(ML|MLRT)\d+..\d+r2', txt)
+        site_text = txt[site_match.start():site_match.end()]
+        site = re.sub('(ML|MLRT)\d+..', '', site_text).replace('r2', '')
 
         match = re.search('Defect\wractionis(\de-\d*|\d.\d*)', txt)
         defect_fraction_text = txt[match.start():match.end()]
 
         defect_fraction = re.sub('Defect\wractionis', '', defect_fraction_text)
 
-        return {'point': point, 'defect_fraction': defect_fraction}
+        return {'site': site, 'defect_fraction': defect_fraction}
 
     except AttributeError:
         raise AttributeError('Failed to identify point or defect fraction')
@@ -230,7 +230,7 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
         pass
 
     try:
-        image_preprocessing_method_2(img_path)
+        img = image_preprocessing_method_2(img)
         data = extract_point_and_defect_fraction_from_img(img)
 
         return data
@@ -239,7 +239,7 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
         pass
 
     try:
-        img = image_preprocessing_method_3(img_path)
+        img = image_preprocessing_method_3(img)
         data = extract_point_and_defect_fraction_from_img(img)
 
         return data
@@ -248,7 +248,7 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
         pass
 
     try:
-        img = image_preprocessing_method_4(img_path)
+        img = image_preprocessing_method_4(img)
         data = extract_point_and_defect_fraction_from_img(img)
 
         return data
@@ -257,7 +257,17 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
         pass
 
     try:
-        image_preprocessing_method_6(img_path)
+        img = image_preprocessing_method_5(img)
+        data = extract_point_and_defect_fraction_from_img(img)
+
+        return data
+
+    except:
+        pass
+
+    try:
+        # Pass in file path instead
+        img = image_preprocessing_method_6(img)
         data = extract_point_and_defect_fraction_from_img(img)
 
         return data
@@ -297,6 +307,8 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
 
 
 def main():
+    site_defect_fraction_data = []
+
     counter = 0
 
     try:
@@ -323,7 +335,7 @@ def main():
                 data = preprocess_img_and_extract_point_and_defect_fraction(
                     img_dir)
 
-                print(data)
+                site_defect_fraction_data.append(data)
 
             except Exception as e:
                 print(e)
