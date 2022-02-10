@@ -308,22 +308,19 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
 
 
 def main():
-    site_defect_fraction_data = [
-        {
-            "site_number": 35,
-            "defect_fraction": "mapitin"
-        }, {
-            "site_number": 36,
-            "defect_fraction": "mapitin"
-        }
-        # , {
-        #     "site_number": 10,
-        #     "defect_fraction": 69
-        # }, {
-        #     "site_number": 11,
-        #     "defect_fraction": 69
-        # }
-    ]
+    site_defect_fraction_data = [{
+        "site_number": 37,
+        "defect_fraction": "mapitin"
+    }, {
+        "site_number": 38,
+        "defect_fraction": "mapitin"
+    }, {
+        "site_number": 39,
+        "defect_fraction": 69
+    }, {
+        "site_number": 40,
+        "defect_fraction": 69
+    }]
 
     # counter = 0
 

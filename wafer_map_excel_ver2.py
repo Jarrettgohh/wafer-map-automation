@@ -19,11 +19,15 @@ from functions import pretty_print_error_msg
 f = open('config.json')
 config_json = json.load(f)
 
+html_file_directory = config_json['html_file_directory']
 wafer_mapping_configurations = config_json['wafer_mapping_configurations']
 
 file_directory = wafer_mapping_configurations['file_directory']
 file_name = wafer_mapping_configurations['file_name']
-number_of_wafer_points = wafer_mapping_configurations['number_of_wafer_points']
+
+wafer_information = wafer_mapping_configurations['wafer_information']
+number_of_wafer_points = wafer_information['number_of_wafer_points']
+wafer_ids = wafer_information['wafer_ids']
 
 to_plot = wafer_mapping_configurations['to_plot']
 to_plot_rows = to_plot['rows']
@@ -46,26 +50,45 @@ ws = wb['3rd Wafer (ML 12)']
 
 
 def write_area_fraction_to_excel(site_defect_fraction_data: list):
+
+    len_site_defect_fraction_data = len(site_defect_fraction_data)
+    len_wafer_ids = len(wafer_ids)
+
+    if (number_of_wafer_points *
+            len_wafer_ids) != len_site_defect_fraction_data:
+        pretty_print_error_msg(
+            f'`The product of the number_of_wafer_points` and the number of items in `wafer_ids` should equal to the number of images provided in {html_file_directory}]'
+        )
+        sys.exit()
+
     try:
 
         to_write_col = column_index_from_string(area_fraction_columns[0]) - 1
 
-        # Iterate site defect fraction dat
-        for site_defect_fraction in site_defect_fraction_data:
-            site_number = site_defect_fraction['site_number']
-            defect_fraction = site_defect_fraction['defect_fraction']
+        for wafer_batch_index, wafer_id in enumerate(wafer_ids):
 
-            row_to_write = area_fraction_rows[1] - (number_of_wafer_points -
-                                                    site_number) - 1
-            df = pd.DataFrame([defect_fraction])
+            site_defect_fraction_data_start_index_to_read = wafer_batch_index * number_of_wafer_points
 
-            append_df_to_excel(
-                filename=file_path,
-                df=df,
-                sheet_name='3rd Wafer (ML 12)',
-                startrow=row_to_write,
-                startcol=to_write_col,
-            )
+            # Iterate site defect fraction data
+            for site_defect_fraction in site_defect_fraction_data[
+                    site_defect_fraction_data_start_index_to_read:
+                    site_defect_fraction_data_start_index_to_read +
+                    number_of_wafer_points]:
+
+                site_number = site_defect_fraction['site_number']
+                defect_fraction = site_defect_fraction['defect_fraction']
+
+                row_to_write = area_fraction_rows[1] - (
+                    number_of_wafer_points - site_number) - 1
+                df = pd.DataFrame([defect_fraction])
+
+                append_df_to_excel(
+                    filename=file_path,
+                    df=df,
+                    sheet_name=wafer_id,
+                    startrow=row_to_write,
+                    startcol=to_write_col,
+                )
 
     except PermissionError:
         pretty_print_error_msg(
