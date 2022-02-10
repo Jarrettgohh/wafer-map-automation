@@ -14,6 +14,7 @@ from openpyxl.chart import (
 )
 
 from append_df_to_excel import append_df_to_excel
+from functions import pretty_print_error_msg
 
 f = open('config.json')
 config_json = json.load(f)
@@ -22,7 +23,7 @@ wafer_mapping_configurations = config_json['wafer_mapping_configurations']
 
 file_directory = wafer_mapping_configurations['file_directory']
 file_name = wafer_mapping_configurations['file_name']
-sheet_name = wafer_mapping_configurations['sheet_name']
+number_of_wafer_points = wafer_mapping_configurations['number_of_wafer_points']
 
 to_plot = wafer_mapping_configurations['to_plot']
 to_plot_rows = to_plot['rows']
@@ -41,32 +42,41 @@ color_indicators = wafer_mapping_configurations['color_indicators']
 file_path = f'{file_directory}/{file_name}'
 
 wb = load_workbook(filename=file_path)
-ws = wb[sheet_name]
+ws = wb['3rd Wafer (ML 12)']
 
 
-def write_area_fraction_to_excel(area_fraction_df: pd.DataFrame):
+def write_area_fraction_to_excel(site_defect_fraction_data: list):
     try:
+
         to_write_col = column_index_from_string(area_fraction_columns[0]) - 1
 
-        append_df_to_excel(
-            filename=file_path,
-            df=area_fraction_df,
-            sheet_name=sheet_name,
-            startrow=area_fraction_rows[0] - 1,
-            startcol=to_write_col,
-        )
+        # Iterate site defect fraction dat
+        for site_defect_fraction in site_defect_fraction_data:
+            site_number = site_defect_fraction['site_number']
+            defect_fraction = site_defect_fraction['defect_fraction']
+
+            row_to_write = area_fraction_rows[1] - (number_of_wafer_points -
+                                                    site_number) - 1
+            df = pd.DataFrame([defect_fraction])
+
+            append_df_to_excel(
+                filename=file_path,
+                df=df,
+                sheet_name='3rd Wafer (ML 12)',
+                startrow=row_to_write,
+                startcol=to_write_col,
+            )
 
     except PermissionError:
-        print(
+        pretty_print_error_msg(
             f'Failed to write excel file at path: {file_path}. Do ensure that the file is not open/running.'
         )
         sys.exit()
 
     except Exception as e:
-        print(
+        pretty_print_error_msg(
             f'Something went wrong with writing to the excel file at path: {file_path}'
         )
-        print(e)
 
         sys.exit()
 
@@ -125,8 +135,8 @@ def plot_scatter_graph():
         sys.exit()
 
 
-def wafer_map_excel(area_fraction_df: pd.DataFrame):
-    write_area_fraction_to_excel(area_fraction_df)
+def wafer_map_excel(site_defect_fraction_data: list):
+    write_area_fraction_to_excel(site_defect_fraction_data)
     # plot_scatter_graph()
 
     os.startfile(file_path)

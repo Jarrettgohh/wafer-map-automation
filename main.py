@@ -10,8 +10,9 @@ import tempfile
 from PIL import Image, ImageEnhance
 from bs4 import BeautifulSoup
 from urllib.request import urlretrieve
-
 from pytesseract.pytesseract import image_to_osd
+
+from wafer_map_excel_ver2 import wafer_map_excel
 
 f = open('config.json')
 config_json = json.load(f)
@@ -307,44 +308,62 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
 
 
 def main():
-    site_defect_fraction_data = []
+    site_defect_fraction_data = [
+        {
+            "site_number": 35,
+            "defect_fraction": "mapitin"
+        }, {
+            "site_number": 36,
+            "defect_fraction": "mapitin"
+        }
+        # , {
+        #     "site_number": 10,
+        #     "defect_fraction": 69
+        # }, {
+        #     "site_number": 11,
+        #     "defect_fraction": 69
+        # }
+    ]
 
-    counter = 0
+    # counter = 0
 
-    try:
-        images_dir = images_directory
-        image_files = os.listdir(images_dir)
+    # try:
+    #     images_dir = images_directory
+    #     image_files = os.listdir(images_dir)
 
-        # download_images_from_html(folder_dir_to_save=images_dir)
+    #     # download_images_from_html(folder_dir_to_save=images_dir)
 
-        # try:
+    #     # try:
 
-        #     test_img_path = './images/image_6.png'
-        #     print(
-        #         preprocess_img_and_extract_point_and_defect_fraction(
-        #             test_img_path))
+    #     #     test_img_path = './images/image_6.png'
+    #     #     print(
+    #     #         preprocess_img_and_extract_point_and_defect_fraction(
+    #     #             test_img_path))
 
-        # except Exception as e:
-        #     print(e)
+    #     # except Exception as e:
+    #     #     print(e)
 
-        for img_index in range(len(image_files)):
-            print(f'index: {img_index}')
-            img_dir = f'{images_dir}/image_{img_index}.png'
+    #     for img_index in range(len(image_files)):
+    #         print(f'index: {img_index}')
+    #         img_dir = f'{images_dir}/image_{img_index}.png'
 
-            try:
-                data = preprocess_img_and_extract_point_and_defect_fraction(
-                    img_dir)
+    #         try:
+    #             data = preprocess_img_and_extract_point_and_defect_fraction(
+    #                 img_dir)
 
-                site_defect_fraction_data.append(data)
+    #             site_defect_fraction_data.append(data)
 
-            except Exception as e:
-                print(e)
-                counter += 1
+    #         except Exception as e:
+    #         site_defect_fraction_data.append(None)
+    #             print(e)
+    #             counter += 1
 
-        print(counter)
+    #     print(counter)
 
-    except KeyboardInterrupt:
-        sys.exit()
+    # except KeyboardInterrupt:
+    #     sys.exit()
+
+    wafer_map_excel(site_defect_fraction_data=site_defect_fraction_data)
 
 
 main()

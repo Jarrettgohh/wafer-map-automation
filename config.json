@@ -5,7 +5,7 @@
   "wafer_mapping_configurations": {
     "file_directory": "C:/Users/gohja/Desktop/wafer-map-automation",
     "file_name": "wafer-mapping-automation-test.xlsx",
-    "sheet_name": "Coding Testing on ML 10",
+    "number_of_wafer_points": 49,
     "to_plot": {
       "rows": [2, 50],
       "columns": ["B", "C"]
