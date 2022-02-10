@@ -4,6 +4,7 @@ import sys
 import pandas as pd
 
 from openpyxl.utils.cell import column_index_from_string
+from openpyxl.styles import PatternFill
 from openpyxl.chart.shapes import GraphicalProperties
 from openpyxl.chart.marker import Marker
 from openpyxl import load_workbook
@@ -28,6 +29,10 @@ file_name = wafer_mapping_configurations['file_name']
 wafer_information = wafer_mapping_configurations['wafer_information']
 number_of_wafer_points = wafer_information['number_of_wafer_points']
 wafer_ids = wafer_information['wafer_ids']
+
+error_information = wafer_mapping_configurations['error_information']
+error_information_cell_color = error_information['cell_color']
+error_information_scatter_site_color = error_information['scatter_site_color']
 
 to_plot = wafer_mapping_configurations['to_plot']
 to_plot_rows = to_plot['rows']
@@ -84,12 +89,6 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
                         f'Failed to read defect fraction for site {site_number}, skipping...'
                     )
 
-                    #
-                    # Color the cell according to `error` color set in config.json
-                    # Color the scatter point too
-                    #
-
-                    # continue for now
                     continue
 
                 site_number = int(site_defect_fraction['site'])
@@ -152,32 +151,49 @@ def plot_scatter_graph(sheet_name: str):
         area_fraction_value = ws[area_fraction_columns[0] +
                                  str(plot_row_index)].value
 
-        if area_fraction_value == None:
-            continue
+        is_area_fraction_value_undefined = area_fraction_value == None
 
-        area_fraction_percentage = area_fraction_value * 100
+        # There is no area/defect fraction value
+        if is_area_fraction_value_undefined:
+            cell_color = error_information_cell_color if error_information_cell_color != None else "800000"
+            scatter_site_color = error_information_scatter_site_color
 
-        color = 'blue'
+        else:
+            scatter_site_color = 'blue'
+            area_fraction_percentage = area_fraction_value * 100
 
-        for color_indicator in color_indicators:
-            color_indicator_range = color_indicators[color_indicator]
-            color_indicator_lower_range = color_indicator_range[0]
-            color_indicator_upper_range = color_indicator_range[1]
+            for color_indicator in color_indicators:
+                color_indicator_range = color_indicators[color_indicator]
+                color_indicator_lower_range = color_indicator_range[0]
+                color_indicator_upper_range = color_indicator_range[1]
 
-            is_area_fraction_percentage_in_range = area_fraction_percentage >= color_indicator_lower_range and area_fraction_percentage <= color_indicator_upper_range
+                is_area_fraction_percentage_in_range = area_fraction_percentage >= color_indicator_lower_range and area_fraction_percentage <= color_indicator_upper_range
 
-            if is_area_fraction_percentage_in_range:
-                color = color_indicator
-                break
+                if is_area_fraction_percentage_in_range:
+                    scatter_site_color = color_indicator
+                    break
+
+            cell_color = scatter_site_color
+
+        # print(area_fraction_columns[0] + str(plot_row_index))
+        # print(cell_color)
+
+        # Color the cells
+        cellFill = PatternFill(fill_type='solid', fgColor=cell_color)
+        ws[area_fraction_columns[0] + str(plot_row_index)].fill = cellFill
 
         xvalues = Reference(ws, min_col=x_col, min_row=plot_row_index)
         yvalues = Reference(ws, min_col=y_col, min_row=plot_row_index)
 
-        # Plot the points on the scatter chart
+        if scatter_site_color == None:
+            continue
+
+        # Plot and color the points on the scatter chart
         series = Series(xvalues, yvalues)
-        series.marker = Marker('circle',
-                               size=15,
-                               spPr=GraphicalProperties(solidFill=color))
+        series.marker = Marker(
+            'circle',
+            size=15,
+            spPr=GraphicalProperties(solidFill=scatter_site_color))
         series.graphicalProperties.line.noFill = True
 
         chart.series.append(series)
@@ -197,7 +213,6 @@ def plot_scatter_graph(sheet_name: str):
 def wafer_map_excel(site_defect_fraction_data: list):
     try:
         write_area_fraction_to_excel(site_defect_fraction_data)
-
         os.startfile(file_path)
 
     except KeyboardInterrupt:

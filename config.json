@@ -23,6 +23,10 @@
         "13th Wafer (ML RT 7)"
       ]
     },
+    "error_information": {
+      "cell_color": "800000",
+      "scatter_site_color": "800000"
+    },
     "to_plot": {
       "rows": [2, 50],
       "columns": ["B", "C"]
