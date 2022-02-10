@@ -4,10 +4,24 @@
 
   "wafer_mapping_configurations": {
     "file_directory": "C:/Users/gohja/Desktop/wafer-map-automation",
-    "file_name": "wafer-mapping-automation-test.xlsx",
+    "file_name": "wafer-mapping-automation-test - Copy.xlsx",
     "wafer_information": {
-      "number_of_wafer_points": 2,
-      "wafer_ids": ["1st Wafer (ML 1)", "2nd Wafer (ML 10)"]
+      "number_of_wafer_points": 49,
+      "wafer_ids": [
+        "1st Wafer (ML 1)",
+        "2nd Wafer (ML 10)",
+        "3rd Wafer (ML 12)",
+        "4th Wafer (ML 14)",
+        "5th Wafer (ML 15)",
+        "6th Wafer (ML 2)",
+        "7th Wafer (ML 5)",
+        "8th Wafer (ML RT 10)",
+        "9th Wafer (ML RT 12)",
+        "10th Wafer (ML RT 13)",
+        "11th Wafer (ML RT 2)",
+        "12th Wafer (ML RT 3)",
+        "13th Wafer (ML RT 7)"
+      ]
     },
     "to_plot": {
       "rows": [2, 50],

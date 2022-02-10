@@ -14,7 +14,7 @@ from openpyxl.chart import (
 )
 
 from append_df_to_excel import append_df_to_excel
-from functions import pretty_print_error_msg
+from functions import pretty_print, pretty_print_error_msg
 
 f = open('config.json')
 config_json = json.load(f)
@@ -45,9 +45,6 @@ color_indicators = wafer_mapping_configurations['color_indicators']
 
 file_path = f'{file_directory}/{file_name}'
 
-wb = load_workbook(filename=file_path)
-ws = wb['3rd Wafer (ML 12)']
-
 
 def write_area_fraction_to_excel(site_defect_fraction_data: list):
 
@@ -56,6 +53,7 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
 
     if (number_of_wafer_points *
             len_wafer_ids) != len_site_defect_fraction_data:
+
         pretty_print_error_msg(
             f'`The product of the number_of_wafer_points` and the number of items in `wafer_ids` should equal to the number of images provided in {html_file_directory}]'
         )
@@ -67,6 +65,11 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
 
         for wafer_batch_index, wafer_id in enumerate(wafer_ids):
 
+            if wafer_batch_index == 1:
+                break
+
+            pretty_print(f'Working on {wafer_id}')
+
             site_defect_fraction_data_start_index_to_read = wafer_batch_index * number_of_wafer_points
 
             # Iterate site defect fraction data
@@ -75,8 +78,27 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
                     site_defect_fraction_data_start_index_to_read +
                     number_of_wafer_points]:
 
-                site_number = site_defect_fraction['site_number']
-                defect_fraction = site_defect_fraction['defect_fraction']
+                # Failed to read from the image
+                if site_defect_fraction == None:
+                    print(
+                        f'Failed to read defect fraction for site {site_number}, skipping...'
+                    )
+
+                    #
+                    # Color the cell according to `error` color set in config.json
+                    # Color the scatter point too
+                    #
+
+                    # continue for now
+                    continue
+
+                site_number = int(site_defect_fraction['site'])
+                defect_fraction = float(
+                    site_defect_fraction['defect_fraction'])
+
+                print(
+                    f'Appending defect fraction data for site {site_number}...'
+                )
 
                 row_to_write = area_fraction_rows[1] - (
                     number_of_wafer_points - site_number) - 1
@@ -90,6 +112,9 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
                     startcol=to_write_col,
                 )
 
+            # Plot scatter graph
+            plot_scatter_graph(sheet_name=wafer_id)
+
     except PermissionError:
         pretty_print_error_msg(
             f'Failed to write excel file at path: {file_path}. Do ensure that the file is not open/running.'
@@ -100,11 +125,18 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
         pretty_print_error_msg(
             f'Something went wrong with writing to the excel file at path: {file_path}'
         )
+        print(e)
 
         sys.exit()
 
 
-def plot_scatter_graph():
+def plot_scatter_graph(sheet_name: str):
+
+    print(f'Plotting the scatter graph for {sheet_name}...')
+
+    wb = load_workbook(filename=file_path)
+    ws = wb[sheet_name]
+
     # Create a scatter chart
     chart = ScatterChart()
     chart.title = "Scatter Chart Automation Test"
@@ -119,6 +151,10 @@ def plot_scatter_graph():
 
         area_fraction_value = ws[area_fraction_columns[0] +
                                  str(plot_row_index)].value
+
+        if area_fraction_value == None:
+            continue
+
         area_fraction_percentage = area_fraction_value * 100
 
         color = 'blue'
@@ -152,14 +188,17 @@ def plot_scatter_graph():
         wb.save(file_name)
 
     except PermissionError:
-        print(
+        pretty_print_error_msg(
             f'Failed to save excel file at path: {file_path}. Do ensure that the file is not open/running.'
         )
         sys.exit()
 
 
 def wafer_map_excel(site_defect_fraction_data: list):
-    write_area_fraction_to_excel(site_defect_fraction_data)
-    # plot_scatter_graph()
+    try:
+        write_area_fraction_to_excel(site_defect_fraction_data)
 
-    os.startfile(file_path)
+        os.startfile(file_path)
+
+    except KeyboardInterrupt:
+        sys.exit()
