@@ -185,6 +185,7 @@ def plot_scatter_graph(sheet_name: str):
         # Color the X and Y axis cells and the area fraction percentage cells with color
         if cell_color != None:
             cellFill = PatternFill(fill_type='solid', fgColor=cell_color)
+
             ws[to_plot_columns['X_axis'] + str(plot_row_index)].fill = cellFill
             ws[to_plot_columns['Y_axis'] + str(plot_row_index)].fill = cellFill
             ws[area_fraction_columns['area_fraction_percentage'] +
@@ -194,10 +195,12 @@ def plot_scatter_graph(sheet_name: str):
         if error_cell_color != None:
             cellFill = PatternFill(fill_type='solid', fgColor=error_cell_color)
 
+            ws[to_plot_columns['X_axis'] + str(plot_row_index)].fill = cellFill
+            ws[to_plot_columns['Y_axis'] + str(plot_row_index)].fill = cellFill
             ws[area_fraction_columns['area_fraction'] +
                str(plot_row_index)].fill = cellFill
             ws[area_fraction_columns['area_fraction_percentage'] +
-               +str(plot_row_index)].fill = cellFill
+               str(plot_row_index)].fill = cellFill
 
         xvalues = Reference(ws, min_col=x_col, min_row=plot_row_index)
         yvalues = Reference(ws, min_col=y_col, min_row=plot_row_index)
