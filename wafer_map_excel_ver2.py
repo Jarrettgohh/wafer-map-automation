@@ -70,10 +70,6 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
             area_fraction_columns['area_fraction']) - 1
 
         for wafer_batch_index, wafer_id in enumerate(wafer_ids):
-
-            if wafer_batch_index == 1:
-                break
-
             pretty_print(f'Working on {wafer_id}')
 
             site_defect_fraction_data_start_index_to_read = wafer_batch_index * number_of_wafer_points
@@ -86,10 +82,6 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
 
                 # Failed to read from the image
                 if site_defect_fraction == None:
-                    print(
-                        f'Failed to read defect fraction for site {site_number}, skipping...'
-                    )
-
                     continue
 
                 site_number = int(site_defect_fraction['site'])
@@ -139,7 +131,7 @@ def plot_scatter_graph(sheet_name: str):
 
     # Create a scatter chart
     chart = ScatterChart()
-    chart.title = "Scatter Chart Automation Test"
+    chart.title = sheet_name
     chart.legend = None
 
     x_col = column_index_from_string(to_plot_columns['X_axis'])
@@ -163,7 +155,7 @@ def plot_scatter_graph(sheet_name: str):
             scatter_site_color = error_information_scatter_site_color
 
         else:
-            scatter_site_color = 'blue'
+            scatter_site_color = '4472C4'
             area_fraction_percentage = area_fraction_value * 100
 
             ws[area_fraction_columns['area_fraction_percentage'] +
