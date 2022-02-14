@@ -53,6 +53,8 @@ file_path = f'{file_directory}/{file_name}'
 
 def write_area_fraction_to_excel(site_defect_fraction_data: list):
 
+    pretty_print(f'Compiling data in the excel file at path: {file_path}')
+
     len_site_defect_fraction_data = len(site_defect_fraction_data)
     len_wafer_ids = len(wafer_ids)
 
