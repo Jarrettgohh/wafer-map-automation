@@ -18,6 +18,12 @@ NOTES:
 --> Fill up all data that the site number and defect fraction can be read, and leave cells that can't be read, as blank, with red highlight
 
 
+      // "columns": {
+
+      //   "X":"",
+      //   "Y: ""
+      // }
+
 --> To chain the image preprocessing
 
 wafer 1

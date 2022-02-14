@@ -66,7 +66,8 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
 
     try:
 
-        to_write_col = column_index_from_string(area_fraction_columns[0]) - 1
+        to_write_col = column_index_from_string(
+            area_fraction_columns['area_fraction']) - 1
 
         for wafer_batch_index, wafer_id in enumerate(wafer_ids):
 
@@ -141,26 +142,32 @@ def plot_scatter_graph(sheet_name: str):
     chart.title = "Scatter Chart Automation Test"
     chart.legend = None
 
-    x_col = column_index_from_string(to_plot_columns[0])
-    y_col = column_index_from_string(to_plot_columns[1])
+    x_col = column_index_from_string(to_plot_columns['X_axis'])
+    y_col = column_index_from_string(to_plot_columns['Y_axis'])
     min_row = to_plot_rows[0]
     max_row = to_plot_rows[1]
 
     for plot_row_index in range(min_row, max_row + 1):
 
-        area_fraction_value = ws[area_fraction_columns[0] +
+        area_fraction_value = ws[area_fraction_columns['area_fraction'] +
                                  str(plot_row_index)].value
 
         is_area_fraction_value_undefined = area_fraction_value == None
 
+        error_cell_color = None
+        cell_color = None
+
         # There is no area/defect fraction value
         if is_area_fraction_value_undefined:
-            cell_color = error_information_cell_color if error_information_cell_color != None else "800000"
+            error_cell_color = error_information_cell_color if error_information_cell_color != None else "800000"
             scatter_site_color = error_information_scatter_site_color
 
         else:
             scatter_site_color = 'blue'
             area_fraction_percentage = area_fraction_value * 100
+
+            ws[area_fraction_columns['area_fraction_percentage'] +
+               str(plot_row_index)].value = area_fraction_percentage
 
             for color_indicator in color_indicators:
                 color_indicator_range = color_indicators[color_indicator]
@@ -175,12 +182,22 @@ def plot_scatter_graph(sheet_name: str):
 
             cell_color = scatter_site_color
 
-        # print(area_fraction_columns[0] + str(plot_row_index))
-        # print(cell_color)
+        # Color the X and Y axis cells and the area fraction percentage cells with color
+        if cell_color != None:
+            cellFill = PatternFill(fill_type='solid', fgColor=cell_color)
+            ws[to_plot_columns['X_axis'] + str(plot_row_index)].fill = cellFill
+            ws[to_plot_columns['Y_axis'] + str(plot_row_index)].fill = cellFill
+            ws[area_fraction_columns['area_fraction_percentage'] +
+               str(plot_row_index)].fill = cellFill
 
-        # Color the cells
-        cellFill = PatternFill(fill_type='solid', fgColor=cell_color)
-        ws[area_fraction_columns[0] + str(plot_row_index)].fill = cellFill
+        # Color the cell under `area_fraction` with error color
+        if error_cell_color != None:
+            cellFill = PatternFill(fill_type='solid', fgColor=error_cell_color)
+
+            ws[area_fraction_columns['area_fraction'] +
+               str(plot_row_index)].fill = cellFill
+            ws[area_fraction_columns['area_fraction_percentage'] +
+               +str(plot_row_index)].fill = cellFill
 
         xvalues = Reference(ws, min_col=x_col, min_row=plot_row_index)
         yvalues = Reference(ws, min_col=y_col, min_row=plot_row_index)

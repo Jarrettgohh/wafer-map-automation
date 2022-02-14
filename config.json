@@ -25,18 +25,24 @@
     },
     "error_information": {
       "cell_color": "800000",
-      "scatter_site_color": "800000"
+      "scatter_site_color": null
     },
     "to_plot": {
       "rows": [2, 50],
-      "columns": ["B", "C"]
+      "columns": {
+        "X_axis": "B",
+        "Y_axis": "C"
+      }
     },
     "area_fraction": {
       "rows": [2, 50],
-      "columns": ["D", "E"]
+      "columns": {
+        "area_fraction": "D",
+        "area_fraction_percentage": "E"
+      }
     },
     "color_indicators": {
-      "0000FF": [0, 5],
+      "0C83BC": [0, 5],
       "ADD8E6": [5, 15],
       "FFFFFF": [15, 25],
       "FF7F7F ": [25, 35],
