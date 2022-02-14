@@ -189,7 +189,7 @@ def image_preprocessing_method_6(img: Image):
     return im_new
 
 
-def extract_point_and_defect_fraction_from_img(img: Image):
+def extract_point_and_defect_fraction_from_img(img: Image, file_name: str):
 
     try:
         # Configurations to make pytesseract more accurate
@@ -217,15 +217,18 @@ def extract_point_and_defect_fraction_from_img(img: Image):
         return {'site': site, 'defect_fraction': defect_fraction}
 
     except AttributeError:
-        raise AttributeError('Failed to identify point or defect fraction')
+        raise AttributeError(
+            f'Failed to identify point or defect fraction for {file_name}')
 
 
 # Function definition to extract defect fraction from the image
-def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
+def preprocess_img_and_extract_point_and_defect_fraction(
+        img_path: str, file_name: str):
 
     try:
         img = image_preprocessing_method_1(img_path)
-        data = extract_point_and_defect_fraction_from_img(img)
+        data = extract_point_and_defect_fraction_from_img(img=img,
+                                                          file_name=file_name)
 
         return data
 
@@ -234,7 +237,8 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
 
     try:
         img = image_preprocessing_method_2(img)
-        data = extract_point_and_defect_fraction_from_img(img)
+        data = extract_point_and_defect_fraction_from_img(img=img,
+                                                          file_name=file_name)
 
         return data
 
@@ -243,7 +247,8 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
 
     try:
         img = image_preprocessing_method_3(img)
-        data = extract_point_and_defect_fraction_from_img(img)
+        data = extract_point_and_defect_fraction_from_img(img=img,
+                                                          file_name=file_name)
 
         return data
 
@@ -252,7 +257,8 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
 
     try:
         img = image_preprocessing_method_4(img)
-        data = extract_point_and_defect_fraction_from_img(img)
+        data = extract_point_and_defect_fraction_from_img(img=img,
+                                                          file_name=file_name)
 
         return data
 
@@ -261,7 +267,8 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
 
     try:
         img = image_preprocessing_method_5(img)
-        data = extract_point_and_defect_fraction_from_img(img)
+        data = extract_point_and_defect_fraction_from_img(img=img,
+                                                          file_name=file_name)
 
         return data
 
@@ -271,7 +278,8 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
     try:
         # Pass in file path instead
         img = image_preprocessing_method_6(img)
-        data = extract_point_and_defect_fraction_from_img(img)
+        data = extract_point_and_defect_fraction_from_img(img=img,
+                                                          file_name=file_name)
 
         return data
 
@@ -285,7 +293,8 @@ def preprocess_img_and_extract_point_and_defect_fraction(img_path: str):
         factor = 2
         enhanced_img = enhancer.enhance(factor)
 
-        data = extract_point_and_defect_fraction_from_img(enhanced_img)
+        data = extract_point_and_defect_fraction_from_img(img=enhanced_img,
+                                                          file_name=file_name)
 
         return data
 
@@ -319,7 +328,7 @@ def main():
         # download_images_from_html(folder_dir_to_save=images_dir)
 
         for img_index in range(len(image_files)):
-            print(
+            pretty_print(
                 f'Extracting area defect fraction and site number data from image_{img_index}.png...'
             )
 
@@ -327,7 +336,7 @@ def main():
 
             try:
                 data = preprocess_img_and_extract_point_and_defect_fraction(
-                    img_dir)
+                    img_path=img_dir, file_name=f'image_{img_index}.png')
 
                 site_defect_fraction_data.append(data)
 
