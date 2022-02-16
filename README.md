@@ -60,7 +60,7 @@ Automation for wafer mapping -- Jonathan's project
 1.  `number_of_wafer_points`: Number of wafer points present on the wafer sample
 2.  `wafer_ids`: An array of wafer IDs. These IDs would be used as the sheet name in the excel file
 
-- *`error_information`*:
+*`error_information`*:
 - Details regarding the color fills if the automation fails to read the details from the image data
 1. `cell_color`: Color to fill the cell with if the automation fails to read the details from the image data
 2. `scatter_site_color`: Color to fill the site on the scatter graph, if the automation fails to read the details from the image data
