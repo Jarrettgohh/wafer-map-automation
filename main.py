@@ -7,16 +7,22 @@ import cv2
 import json
 import numpy as np
 import tempfile
+import pathlib
 
 from PIL import Image, ImageEnhance
 from bs4 import BeautifulSoup
-from urllib.request import urlretrieve
-from pytesseract.pytesseract import image_to_osd
+# from urllib.request import urlretrieve
+# from pytesseract.pytesseract import image_to_osd
 from functions import pretty_print
-
 from wafer_map_excel_ver2 import wafer_map_excel
 
-f = open('config.json')
+current_dir = os.path.dirname(os.path.abspath(__file__))
+path_to_config_file = current_dir.replace("\\main\\dist", "") + '\\config.json'
+
+print(current_dir)
+print(path_to_config_file)
+
+f = open(path_to_config_file)
 config_json = json.load(f)
 
 # Path to pytesseract files
@@ -30,7 +36,6 @@ images_directory = config_json['images_directory']
 # file = codecs.open(path_to_html, 'r', 'utf-8')
 # soup = BeautifulSoup(file.read(), 'html.parser')
 
-
 def image_smoothening(img):
 
     BINARY_THREHOLD = 180
@@ -40,7 +45,6 @@ def image_smoothening(img):
     blur = cv2.GaussianBlur(th2, (1, 1), 0)
     _, th3 = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return th3
-
 
 def remove_noise_and_smooth(file_name: str):
     img = cv2.imread(file_name, 0)
@@ -53,7 +57,6 @@ def remove_noise_and_smooth(file_name: str):
     img = image_smoothening(img)
     or_image = cv2.bitwise_or(img, closing)
     return or_image
-
 
 def set_image_dpi(img: Image):
     IMAGE_SIZE = 1800
@@ -68,7 +71,6 @@ def set_image_dpi(img: Image):
     temp_filename = temp_file.name
     im_resized.save(temp_filename, dpi=(300, 300))
     return temp_filename
-
 
 def image_preprocessing_method_1(img_path: str):
     img = cv2.imread(img_path)
@@ -100,7 +102,6 @@ def image_preprocessing_method_1(img_path: str):
 
     return img
 
-
 # Similar to method 1, but just lesser processing steps
 def image_preprocessing_method_2(img: Image):
     # img = cv2.imread(img_path)
@@ -111,7 +112,6 @@ def image_preprocessing_method_2(img: Image):
     img = cv2.erode(img, kernel, iterations=1)
 
     return img
-
 
 def image_preprocessing_method_3(img: Image):
 
@@ -132,7 +132,6 @@ def image_preprocessing_method_3(img: Image):
         e_idx = s_idx + int(h_thr / 2)
 
     return crp
-
 
 def image_preprocessing_method_4(img: Image):
     # img = cv2.imread(img_path)
@@ -159,7 +158,6 @@ def image_preprocessing_method_4(img: Image):
 
     return result
 
-
 def image_preprocessing_method_5(img: Image):
     # img = cv2.imread(img_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -180,14 +178,12 @@ def image_preprocessing_method_5(img: Image):
 
     return work_img
 
-
 def image_preprocessing_method_6(img: Image):
 
     temp_filename = set_image_dpi(img)
     im_new = remove_noise_and_smooth(temp_filename)
 
     return im_new
-
 
 def extract_point_and_defect_fraction_from_img(img: Image, file_name: str):
 
@@ -219,7 +215,6 @@ def extract_point_and_defect_fraction_from_img(img: Image, file_name: str):
     except AttributeError:
         raise AttributeError(
             f'Failed to identify point or defect fraction for {file_name}')
-
 
 # Function definition to extract defect fraction from the image
 def preprocess_img_and_extract_point_and_defect_fraction(
@@ -301,7 +296,6 @@ def preprocess_img_and_extract_point_and_defect_fraction(
     except AttributeError as e:
         raise AttributeError(e)
 
-
 # # Function definition to download images from the .html file
 # def download_images_from_html(folder_dir_to_save='./images'):
 
@@ -316,7 +310,6 @@ def preprocess_img_and_extract_point_and_defect_fraction(
 
 #         # Saves the image file to folder
 #         urlretrieve(img_src, f'{folder_dir_to_save}/image_{index}.png')
-
 
 def main():
     site_defect_fraction_data = []
@@ -349,75 +342,20 @@ def main():
 
     wafer_map_excel(site_defect_fraction_data=site_defect_fraction_data)
 
+# main()
 
-main()
 
-# image_output.read()  # Do as you wish with it!
+# Mock data would be retrieved from `data.json` -- the part of reading the data from the images would be skipped
+def mock_data():
 
-# image = Image.frombytes('RGB',(300,300),b64decode(img_src_padding))
-# image.save("./test/foo.png")
+    path_to_data = current_dir.replace("\main", "") + '\\data.json'
+    f = open(path_to_data)
+    data_json = json.load(f)
 
-# with open("./test/imageToSavee.png", "wb") as fh:
-# fh.write(base64.b64decode(img_src_padding))
+    wafer_map_excel(site_defect_fraction_data=data_json)
 
-# with open("./test/test.png","wb") as f:
-# img_data = base64.b64decode(img_src_padding)
-# bytes = base64.decodebytes(bytes(img_src_padding, "utf-8"))
-# f.write(img_data)
+    # Artificially pauses
+    input('Press enter to exit the program...')
 
-# f = open('test.jpg', 'wb')
 
-# f.write(bytes)
-
-# f.write(bytes(img_src_padding, "utf-8"))
-# f.close()
-
-# def main(url, out_folder="./merrychristmas/"):
-#     """Downloads all the images at 'url' to /test/"""
-#     soup = document
-#     parsed = list(urlparse(url))
-
-#     for image in soup.findAll("img"):
-#         # print("Image: %(src)s" % image)
-#         filename = image["src"].split("/")[-1]
-#         parsed[2] = image["src"]
-#         outpath = os.path.join(out_folder, filename[0:5] )
-
-#         urlretrieve(image["src"], outpath)
-
-# if __name__ == "__main__":
-#     url = sys.argv[-1]
-#     out_folder = "/test/"
-
-#     main(out_folder)
-
-# Defining binary path to the pytesseract library
-# pytesseract.pytesseract.tesseract_cmd = "./tesseract-ocr-w32-setup-v5.0.0.20211201.exe"
-
-# for index, img in enumerate(document.find_all('img')):
-#     if index == 1:
-#         img_src =img['src']
-#         img_src_padding  = f"{img_src}{'=' * (len(img_src) % 4)}"
-
-#         img = Image.frombytes(mode="RGB",size=(300,300), data=base64.decodebytes(bytes(img_src_padding, "utf-8")))
-#         img.show()
-
-# img_data = base64.b64decode(img_src_padding)
-
-# image = Image.open(io.BytesIO(img_data))
-# image.show()
-
-# image = Image.frombytes("L", (800,200), img_data)
-
-# # Create in-memory PNG
-# buffer = io.BytesIO()
-# image.save(buffer, format="PNG")
-# PNG = buffer.getvalue()
-
-# image = cv2.imshow("Image", np.array(image))
-# cv2.waitKey(0)
-
-# text = pytesseract.image_to_string(PNG)
-# print(text)
-
-# print(img)
+mock_data()

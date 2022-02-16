@@ -7,6 +7,7 @@
 6. https://tesseract-ocr.github.io/tessdoc/ImproveQuality.html
 
 
+
 NOTES:
 
 --> Values listed below indicates the site number; and will be jumbled up when reading from HTML

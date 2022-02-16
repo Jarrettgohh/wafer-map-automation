@@ -1,0 +1,4 @@
+From path of project:
+
+1. Activate virtual environment: .\Scripts\activate
+2. Compile the python files and its dependencies: pyinstaller <python_file_name>
