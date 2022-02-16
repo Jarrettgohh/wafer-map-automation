@@ -46,4 +46,60 @@ Automation for wafer mapping -- Jonathan's project
   }
 }
 ```
+- An example of the `config.json`:
+
+``` json
+{
+  "html_file_directory": "C:/Users/JONATHAN TAN/Desktop/NYP/Reports/Wafer Mapping/20210917b SEM analysis.html",
+  "images_directory": "./images",
+
+  "wafer_mapping_configurations": {
+    "file_directory": "C:/Users/gohja/Desktop/wafer-map-automation",
+    "file_name": "wafer-mapping-automation-test - Copy.xlsx",
+    "wafer_information": {
+      "number_of_wafer_points": 49,
+      "wafer_ids": [
+        "1st Wafer (ML 1)",
+        "2nd Wafer (ML 10)",
+        "3rd Wafer (ML 12)",
+        "4th Wafer (ML 14)",
+        "5th Wafer (ML 15)",
+        "6th Wafer (ML 2)",
+        "7th Wafer (ML 5)",
+        "8th Wafer (ML RT 10)",
+        "9th Wafer (ML RT 12)",
+        "10th Wafer (ML RT 13)",
+        "11th Wafer (ML RT 2)",
+        "12th Wafer (ML RT 3)",
+        "13th Wafer (ML RT 7)"
+      ]
+    },
+    "error_information": {
+      "cell_color": "800000", // To convert from text to HEX
+      "scatter_site_color": null
+    },
+    "to_plot": {
+      "rows": [2, 50],
+      "columns": {
+        "X_axis": "B",
+        "Y_axis": "C"
+      }
+    },
+    "area_fraction": {
+      "rows": [2, 50],
+      "columns": {
+        "area_fraction": "D",
+        "area_fraction_percentage": "E"
+      }
+    },
+    "color_indicators": {
+      "4472C4": [0, 5],
+      "8EA9DB": [5, 15],
+      "FFFFFF": [15, 25],
+      "FF6D6D": [25, 35],
+      "FF0000": [35, 40]
+    }
+  }
+}
+```
 
