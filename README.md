@@ -52,11 +52,11 @@ Automation for wafer mapping -- Jonathan's project
 1. `html_file_directory`: The file directory to the HTML file where the images are stored
 2. `images_directory`: The file directory to store the images extracted from *html_file_directory*
 
-- *`wafer_mapping_configurations`*:
+*`wafer_mapping_configurations`*:
 1.  `folder_directory`: The folder directory where the excel file (to plot the scatter graph) is kept
 2.  `file_name`: The name of the excel file to plot the scatter graph
 
-- *`wafer_information`*:
+*`wafer_information`*:
 1.  `number_of_wafer_points`: Number of wafer points present on the wafer sample
 2.  `wafer_ids`: An array of wafer IDs. These IDs would be used as the sheet name in the excel file
 
@@ -65,19 +65,19 @@ Automation for wafer mapping -- Jonathan's project
 1. `cell_color`: Color to fill the cell with if the automation fails to read the details from the image data
 2. `scatter_site_color`: Color to fill the site on the scatter graph, if the automation fails to read the details from the image data
 
-- *`to_plot`*:
+*`to_plot`*:
 - Details regarding the row and columns to get the data from, when plotting the scatter graph
 1. `rows`: Rows to read the data from
 2. `columns`: The column information to read the data from; corresponding to the X and Y axis
 
 
-- *`area_fraction`*:
+*`area_fraction`*:
 - Details regarding the row and columns to get the data from, when coloring the points on the scatter graph according to the area fraction
 1. `rows`: Rows to read the data from
 2. `columns`: The column information to read the data from; corresponding to the area fraction and area fraction percentage
 
 
-- *`color_indicators`*:
+*`color_indicators`*:
 - Details regarding the color to fill, corresponding to each area fraction range
 
 - An example of the `config.json`:
