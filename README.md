@@ -1,6 +1,12 @@
 # wafer-map-automation
 Automation for wafer mapping -- Jonathan's project
 
+# Documentation
+- This would be the documentation on how to use the computer automation for wafer mapping.
+- The settings for the automation could set in the `config.json` file
+
+- The template given below would be for the `config.json`:
+
 ``` json
 {
   "html_file_directory": "",
