@@ -9,3 +9,5 @@
 /Include
 /dist
 /build
+pyvenv.cfg
+main.spec
