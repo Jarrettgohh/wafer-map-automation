@@ -4,3 +4,8 @@
 .git
 .vscode/*
 /__pycache__
+/Scripts
+/Lib
+/Include
+/dist
+/build
