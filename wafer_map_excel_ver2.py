@@ -23,7 +23,7 @@ config_json = json.load(f)
 html_file_directory = config_json['html_file_directory']
 wafer_mapping_configurations = config_json['wafer_mapping_configurations']
 
-file_directory = wafer_mapping_configurations['file_directory']
+folder_directory = wafer_mapping_configurations['folder_directory']
 file_name = wafer_mapping_configurations['file_name']
 
 wafer_information = wafer_mapping_configurations['wafer_information']
@@ -48,7 +48,7 @@ color_indicators = wafer_mapping_configurations['color_indicators']
 # Open the excel workbook
 #
 
-file_path = f'{file_directory}/{file_name}'
+file_path = f'{folder_directory}/{file_name}'
 
 
 def write_area_fraction_to_excel(site_defect_fraction_data: list):

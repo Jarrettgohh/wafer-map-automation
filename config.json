@@ -3,7 +3,7 @@
   "images_directory": "./images",
 
   "wafer_mapping_configurations": {
-    "file_directory": "C:/Users/gohja/Desktop/wafer-map-automation",
+    "folder_directory": "C:/Users/gohja/Desktop/wafer-map-automation",
     "file_name": "wafer-mapping-automation-test - Copy.xlsx",
     "wafer_information": {
       "number_of_wafer_points": 49,
@@ -24,7 +24,7 @@
       ]
     },
     "error_information": {
-      "cell_color": "800000",
+      "cell_color": "800000", // To convert from text to HEX
       "scatter_site_color": null
     },
     "to_plot": {
