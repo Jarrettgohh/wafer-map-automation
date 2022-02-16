@@ -1,6 +1,7 @@
 # wafer-map-automation
 Automation for wafer mapping -- Jonathan's project
 
+``` json
 {
   "html_file_directory": "",
   "images_directory": "",
@@ -38,4 +39,5 @@ Automation for wafer mapping -- Jonathan's project
     }
   }
 }
+```
 
