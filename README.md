@@ -17,14 +17,14 @@ Automation for wafer mapping -- Jonathan's project
       "scatter_site_color": ""
     },
     "to_plot": {
-      "rows": [*<start_row>*, *<end_row>*],
+      "rows": [ , ],
       "columns": {
         "X_axis": "",
         "Y_axis": ""
       }
     },
     "area_fraction": {
-      "rows": [*<start_row>*, *<end_row>*],
+      "rows": [ , ],
       "columns": {
         "area_fraction": "",
         "area_fraction_percentage": ""
