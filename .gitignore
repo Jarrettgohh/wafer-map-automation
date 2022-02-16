@@ -1,2 +1,6 @@
 /images
 /pytesseract
+/excel_files
+/.git
+/.vscode
+/__pycache__
