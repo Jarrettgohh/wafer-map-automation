@@ -46,6 +46,12 @@ Automation for wafer mapping -- Jonathan's project
   }
 }
 ```
+
+
+# What does the fields in the `config.json` mean?
+`html_file_directory`: The file directory to the HTML file where the images are stored
+`images_directory`: The file directory to store the images extractd from *html_file_directory*
+
 - An example of the `config.json`:
 
 ``` json
