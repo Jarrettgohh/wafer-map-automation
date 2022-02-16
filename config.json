@@ -1,7 +1,6 @@
 {
   "html_file_directory": "C:/Users/JONATHAN TAN/Desktop/NYP/Reports/Wafer Mapping/20210917b SEM analysis.html",
-  "images_directory": "./images",
-
+  "images_folder_name": "images-test",
   "wafer_mapping_configurations": {
     "folder_directory": "C:/Users/gohja/Desktop/wafer-map-exe-test",
     "file_name": "wafer-mapping-automation-template - Copy.xlsx",

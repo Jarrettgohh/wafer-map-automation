@@ -18,7 +18,7 @@ from append_df_to_excel import append_df_to_excel
 from functions import pretty_print, pretty_print_error_msg
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-path_to_config_file = current_dir.replace("\\main\\dist", "") + '\\config.json'
+path_to_config_file = current_dir.replace("\\dist", "").replace("\\main", "") + '\\config.json'
 
 f = open(path_to_config_file)
 config_json = json.load(f)
@@ -76,9 +76,6 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
 
         for wafer_batch_index, wafer_id in enumerate(wafer_ids):
             pretty_print(f'Working on {wafer_id}')
-
-            if wafer_batch_index == 1:
-                break
 
             site_defect_fraction_data_start_index_to_read = wafer_batch_index * number_of_wafer_points
 

@@ -16,21 +16,23 @@ from bs4 import BeautifulSoup
 from functions import pretty_print
 from wafer_map_excel_ver2 import wafer_map_excel
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-path_to_config_file = current_dir.replace("\\main\\dist", "") + '\\config.json'
 
-print(current_dir)
-print(path_to_config_file)
+current_dir = os.path.dirname(os.path.abspath(__file__))
+path_to_config_file = current_dir.replace("\\dist", "").replace("\\main", "") + '\\config.json'
 
 f = open(path_to_config_file)
 config_json = json.load(f)
 
-# Path to pytesseract files
-pytesseract.pytesseract.tesseract_cmd = '.\\pytesseract\\tesseract.exe'
-
 # Path from the config.json file
 path_to_html = config_json['html_file_directory']
-images_directory = config_json['images_directory']
+images_folder_name = config_json['images_folder_name']
+
+path_to_images_folder = current_dir.replace("\\dist", "").replace("\\main", "") + f'\\{images_folder_name}'
+path_to_pytesseract = current_dir.replace("\\dist", "").replace("\\main", "") + f'\\pytesseract\\tesseract.exe'
+
+# Path to pytesseract files
+pytesseract.pytesseract.tesseract_cmd = path_to_pytesseract
+
 
 # # Open and parse the .html file
 # file = codecs.open(path_to_html, 'r', 'utf-8')
@@ -315,13 +317,13 @@ def main():
     site_defect_fraction_data = []
 
     try:
-        images_dir = images_directory
+        images_dir = path_to_images_folder
         image_files = os.listdir(images_dir)
 
         # download_images_from_html(folder_dir_to_save=images_dir)
 
         for img_index in range(len(image_files)):
-            pretty_print(
+            print(
                 f'Extracting area defect fraction and site number data from image_{img_index}.png...'
             )
 
@@ -342,20 +344,20 @@ def main():
 
     wafer_map_excel(site_defect_fraction_data=site_defect_fraction_data)
 
-# main()
+main()
 
 
-# Mock data would be retrieved from `data.json` -- the part of reading the data from the images would be skipped
-def mock_data():
+# # Mock data would be retrieved from `data.json` -- the part of reading the data from the images would be skipped
+# def mock_data():
 
-    path_to_data = current_dir.replace("\main", "") + '\\data.json'
-    f = open(path_to_data)
-    data_json = json.load(f)
+#     path_to_data = current_dir.replace("\main", "") + '\\data.json'
+#     f = open(path_to_data)
+#     data_json = json.load(f)
 
-    wafer_map_excel(site_defect_fraction_data=data_json)
+#     wafer_map_excel(site_defect_fraction_data=data_json)
 
-    # Artificially pauses
-    input('Press enter to exit the program...')
+#     # Artificially pauses
+#     input('Press enter to exit the program...')
 
 
-mock_data()
+# mock_data()
