@@ -11,14 +11,14 @@ import pathlib
 
 from PIL import Image, ImageEnhance
 from bs4 import BeautifulSoup
-# from urllib.request import urlretrieve
-# from pytesseract.pytesseract import image_to_osd
+from urllib.request import urlretrieve
 from functions import pretty_print
 from wafer_map_excel_ver2 import wafer_map_excel
 
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-path_to_config_file = current_dir.replace("\\dist", "").replace("\\main", "") + '\\config.json'
+path_to_config_file = current_dir.replace(
+    "\\dist", "").replace("\\main", "") + '\\config.json'
 
 f = open(path_to_config_file)
 config_json = json.load(f)
@@ -27,16 +27,19 @@ config_json = json.load(f)
 path_to_html = config_json['html_file_directory']
 images_folder_name = config_json['images_folder_name']
 
-path_to_images_folder = current_dir.replace("\\dist", "").replace("\\main", "") + f'\\{images_folder_name}'
-path_to_pytesseract = current_dir.replace("\\dist", "").replace("\\main", "") + f'\\pytesseract\\tesseract.exe'
+path_to_images_folder = current_dir.replace("\\dist", "").replace(
+    "\\main", "") + f'\\{images_folder_name}'
+path_to_pytesseract = current_dir.replace("\\dist", "").replace(
+    "\\main", "") + f'\\pytesseract\\tesseract.exe'
 
-# Path to pytesseract files
-pytesseract.pytesseract.tesseract_cmd = path_to_pytesseract
+# # Path to pytesseract files
+# pytesseract.pytesseract.tesseract_cmd = path_to_pytesseract
 
 
 # # Open and parse the .html file
 # file = codecs.open(path_to_html, 'r', 'utf-8')
 # soup = BeautifulSoup(file.read(), 'html.parser')
+
 
 def image_smoothening(img):
 
@@ -47,6 +50,7 @@ def image_smoothening(img):
     blur = cv2.GaussianBlur(th2, (1, 1), 0)
     _, th3 = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return th3
+
 
 def remove_noise_and_smooth(file_name: str):
     img = cv2.imread(file_name, 0)
@@ -59,6 +63,7 @@ def remove_noise_and_smooth(file_name: str):
     img = image_smoothening(img)
     or_image = cv2.bitwise_or(img, closing)
     return or_image
+
 
 def set_image_dpi(img: Image):
     IMAGE_SIZE = 1800
@@ -73,6 +78,7 @@ def set_image_dpi(img: Image):
     temp_filename = temp_file.name
     im_resized.save(temp_filename, dpi=(300, 300))
     return temp_filename
+
 
 def image_preprocessing_method_1(img_path: str):
     img = cv2.imread(img_path)
@@ -105,6 +111,8 @@ def image_preprocessing_method_1(img_path: str):
     return img
 
 # Similar to method 1, but just lesser processing steps
+
+
 def image_preprocessing_method_2(img: Image):
     # img = cv2.imread(img_path)
     img = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
@@ -114,6 +122,7 @@ def image_preprocessing_method_2(img: Image):
     img = cv2.erode(img, kernel, iterations=1)
 
     return img
+
 
 def image_preprocessing_method_3(img: Image):
 
@@ -134,6 +143,7 @@ def image_preprocessing_method_3(img: Image):
         e_idx = s_idx + int(h_thr / 2)
 
     return crp
+
 
 def image_preprocessing_method_4(img: Image):
     # img = cv2.imread(img_path)
@@ -160,6 +170,7 @@ def image_preprocessing_method_4(img: Image):
 
     return result
 
+
 def image_preprocessing_method_5(img: Image):
     # img = cv2.imread(img_path)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -180,12 +191,14 @@ def image_preprocessing_method_5(img: Image):
 
     return work_img
 
+
 def image_preprocessing_method_6(img: Image):
 
     temp_filename = set_image_dpi(img)
     im_new = remove_noise_and_smooth(temp_filename)
 
     return im_new
+
 
 def extract_point_and_defect_fraction_from_img(img: Image, file_name: str):
 
@@ -219,6 +232,8 @@ def extract_point_and_defect_fraction_from_img(img: Image, file_name: str):
             f'Failed to identify point or defect fraction for {file_name}')
 
 # Function definition to extract defect fraction from the image
+
+
 def preprocess_img_and_extract_point_and_defect_fraction(
         img_path: str, file_name: str):
 
@@ -298,66 +313,71 @@ def preprocess_img_and_extract_point_and_defect_fraction(
     except AttributeError as e:
         raise AttributeError(e)
 
-# # Function definition to download images from the .html file
-# def download_images_from_html(folder_dir_to_save='./images'):
+# Function definition to download images from the .html file
 
-#     try:
-#         os.makedirs(folder_dir_to_save)
-#     except FileExistsError:
-#         pass
 
-#     # Iterates through each image found from .html file and save to local folder
-#     for index, img in enumerate(soup.find_all('img')):
-#         img_src = img['src']
-
-#         # Saves the image file to folder
-#         urlretrieve(img_src, f'{folder_dir_to_save}/image_{index}.png')
-
-def main():
-    site_defect_fraction_data = []
+def download_images_from_html(folder_dir_to_save: str):
 
     try:
-        images_dir = path_to_images_folder
-        image_files = os.listdir(images_dir)
+        os.makedirs(folder_dir_to_save)
+    except FileExistsError:
+        pass
 
-        # download_images_from_html(folder_dir_to_save=images_dir)
+    # Iterates through each image found from .html file and save to local folder
+    for index, img in enumerate(soup.find_all('img')):
+        img_src = img['src']
 
-        for img_index in range(len(image_files)):
-            print(
-                f'Extracting area defect fraction and site number data from image_{img_index}.png...'
-            )
+        # Saves the image file to folder
+        urlretrieve(img_src, f'{folder_dir_to_save}\\image_{index}.png')
 
-            img_dir = f'{images_dir}/image_{img_index}.png'
+# def main():
+#     site_defect_fraction_data = []
 
-            try:
-                data = preprocess_img_and_extract_point_and_defect_fraction(
-                    img_path=img_dir, file_name=f'image_{img_index}.png')
+#     images_dir = path_to_images_folder
 
-                site_defect_fraction_data.append(data)
+#     download_images_from_html(folder_dir_to_save=images_dir)
 
-            except Exception as e:
-                site_defect_fraction_data.append(None)
-                print(e)
+#     try:
+#         image_files = os.listdir(images_dir)
 
-    except KeyboardInterrupt:
-        sys.exit()
+#         for img_index in range(len(image_files)):
+#             print(
+#                 f'Extracting area defect fraction and site number data from image_{img_index}.png...'
+#             )
 
-    wafer_map_excel(site_defect_fraction_data=site_defect_fraction_data)
+#             img_dir = f'{images_dir}/image_{img_index}.png'
 
-main()
+#             try:
+#                 data = preprocess_img_and_extract_point_and_defect_fraction(
+#                     img_path=img_dir, file_name=f'image_{img_index}.png')
+
+#                 site_defect_fraction_data.append(data)
+
+#             except Exception as e:
+#                 site_defect_fraction_data.append(None)
+#                 print(e)
+
+#     except KeyboardInterrupt:
+#         sys.exit()
+
+#     wafer_map_excel(site_defect_fraction_data=site_defect_fraction_data)
+
+# main()
 
 
-# # Mock data would be retrieved from `data.json` -- the part of reading the data from the images would be skipped
-# def mock_data():
+# Mock data would be retrieved from `data.json` -- the part of reading the data from the images would be skipped
+def mock_data():
 
-#     path_to_data = current_dir.replace("\main", "") + '\\data.json'
-#     f = open(path_to_data)
-#     data_json = json.load(f)
+    path_to_data = current_dir.replace("\main", "") + '\\data.json'
+    
+    f = open(path_to_data)
+    data_json = json.load(f)
+    
 
-#     wafer_map_excel(site_defect_fraction_data=data_json)
+    wafer_map_excel(site_defect_fraction_data=data_json)
 
-#     # Artificially pauses
-#     input('Press enter to exit the program...')
+    # Artificially pauses
+    input('Press enter to exit the program...')
 
 
-# mock_data()
+mock_data()

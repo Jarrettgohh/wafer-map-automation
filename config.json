@@ -2,29 +2,15 @@
   "html_file_directory": "C:/Users/JONATHAN TAN/Desktop/NYP/Reports/Wafer Mapping/20210917b SEM analysis.html",
   "images_folder_name": "images-test",
   "wafer_mapping_configurations": {
-    "folder_directory": "C:/Users/gohja/Desktop/wafer-map-exe-test",
-    "file_name": "wafer-mapping-automation-template - Copy.xlsx",
+    "folder_directory": "C:/Users/gohja/Desktop/wafer-map-automation",
+    "file_name": "wafer-mapping-automation-test.xlsx",
     "wafer_information": {
       "number_of_wafer_points": 49,
-      "wafer_ids": [
-        "1st Wafer (ML 1)",
-        "2nd Wafer (ML 10)",
-        "3rd Wafer (ML 12)",
-        "4th Wafer (ML 14)",
-        "5th Wafer (ML 15)",
-        "6th Wafer (ML 2)",
-        "7th Wafer (ML 5)",
-        "8th Wafer (ML RT 10)",
-        "9th Wafer (ML RT 12)",
-        "10th Wafer (ML RT 13)",
-        "11th Wafer (ML RT 2)",
-        "12th Wafer (ML RT 3)",
-        "13th Wafer (ML RT 7)"
-      ]
+      "wafer_ids": ["1st Wafer (ML 1)"]
     },
     "error_information": {
       "cell_color": "800000",
-      "scatter_site_color": null
+      "scatter_site_color": "800000"
     },
     "to_plot": {
       "rows": [2, 50],

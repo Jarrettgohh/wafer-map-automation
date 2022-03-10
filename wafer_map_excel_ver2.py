@@ -58,23 +58,23 @@ def write_area_fraction_to_excel(site_defect_fraction_data: list):
 
     pretty_print(f'Compiling data in the excel file at path: {file_path}')
 
-    len_site_defect_fraction_data = len(site_defect_fraction_data)
-    len_wafer_ids = len(wafer_ids)
+    # len_site_defect_fraction_data = len(site_defect_fraction_data)
+    # len_wafer_ids = len(wafer_ids)
 
-    if (number_of_wafer_points *
-            len_wafer_ids) != len_site_defect_fraction_data:
+    # if (number_of_wafer_points *
+    #         len_wafer_ids) != len_site_defect_fraction_data:
 
-        pretty_print_error_msg(
-            f'`The product of the number_of_wafer_points` and the number of items in `wafer_ids` should equal to the number of images provided in {html_file_directory}]'
-        )
-        sys.exit()
+    #     pretty_print_error_msg(
+    #         f'`The product of the number_of_wafer_points` and the number of items in `wafer_ids` should equal to the number of images provided in {html_file_directory}]'
+    #     )
+    #     sys.exit()
 
     try:
 
         to_write_col = column_index_from_string(
             area_fraction_columns['area_fraction']) - 1
 
-        for wafer_batch_index, wafer_id in enumerate(wafer_ids):
+        for wafer_batch_index, wafer_id in enumerate(wafer_ids):        
             pretty_print(f'Working on {wafer_id}')
 
             site_defect_fraction_data_start_index_to_read = wafer_batch_index * number_of_wafer_points
