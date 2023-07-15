@@ -3,7 +3,7 @@
   "images_folder_name": "images-test",
   "wafer_mapping_configurations": {
     "folder_directory": "C:/Users/gohja/Desktop/wafer-map-automation",
-    "file_name": "wafer-mapping-automation-test.xlsx",
+    "file_name": "wafer-mapping-automation-template.xlsx",
     "wafer_information": {
       "number_of_wafer_points": 49,
       "wafer_ids": ["1st Wafer (ML 1)"]
